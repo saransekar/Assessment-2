@@ -1,4 +1,4 @@
-from Theatre import Theatre,Movie,Show
+from models import Theatre,Movie,Show
 
 # List to store all the theatres 
 theatres = []
