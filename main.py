@@ -1,113 +1,99 @@
-from Theatre import TheatreA,TheatreB 
+from Theatre import Theatre,Movie,Show
 
-# List to store all the contacts 
-theatresA = []
-theatresB = []
+# List to store all the theatres 
+theatres = []
+# List to store all the movies 
+movies = []
 
-def createTheatre():
-    aTheatreMrn = TheatreA("A", "Viswasam", "9.30",20,"500")
-    aTheatreAft = TheatreA("A", "Viswasam", "1.30",20,"500")
-    aTheatreEven = TheatreA("A", "Viswasam", "6.30",20,"500")
+def createTheatres():
+  athreatre = Theatre('A')
+  bthreatre = Theatre('B')
+  theatres.append(athreatre)
+  theatres.append(bthreatre)
+  return athreatre,bthreatre
 
-    bTheatreMrn = TheatreB("B", "petta", "9.30",4,"400")   
-    bTheatreAft = TheatreB("B", "petta", "1.30",3,"400")
-    bTheatreEven = TheatreB("B", "petta", "6.30",2,"400") 
+def createShows():
+  showMrg = Show("9.30 AM", 20, 500)
+  showAft = Show("1.30 PM", 15, 400)
+  showEven = Show("6.30 AM", 10, 300)
+  show = [showMrg,showAft,showEven]
 
-    theatresA.append(aTheatreMrn)
-    theatresA.append(aTheatreAft)
-    theatresA.append(aTheatreEven)
+  newshowMrg = Show("9.30 AM", 20, 500)
+  newshowAft = Show("1.30 PM", 15, 400)
+  newshowEven = Show("6.30 AM", 10, 300)
+  newshow = [newshowMrg,newshowAft,newshowEven]    
+  return show, newshow
 
-    theatresB.append(bTheatreMrn)
-    theatresB.append(bTheatreAft)
-    theatresB.append(bTheatreEven)
+def createMovies(athreatre,bthreatre,show,newshow):
+  movie = Movie("Viswasam", show, athreatre)
+  newMovie = Movie("Petta", newshow, bthreatre) 
+  movies.append(movie)
+  movies.append(newMovie) 
 
-def displayTheatresName(theatres,theatreName,i):   
-    for theatre in theatres:                   
-        if theatre.getTheatreName() not in theatreName:
-            theatreName.append(theatre.getTheatreName())    
-
-    for x,y in enumerate(theatreName):  
-        print("{}{}{}{}".format(x+i,'.',y, '- Theatre show'))
-           
+         
 def listTheatres():
+  for theatre_idx,theatre_val in enumerate(theatres):
+    print("{}{}{}{}".format(theatre_idx+1, '.', theatre_val.getTheatreName(), '- theatre'))
 
-    aTheatreName = []
-    aTheatre = displayTheatresName(theatresA,aTheatreName,1)
-    bTheatreName = []
-    bTheatre = displayTheatresName(theatresB,bTheatreName,2)
- 
-def getTheatreDetails(theatreList):
-    for theatre_idx,theatre_val in enumerate(theatreList):               
-        print(str(theatre_idx + 1) + '.' + theatre_val.getMovieName() + ' ' + theatre_val.getShowTime() + ' ' + str(theatre_val.getSeat()) + ' ' + theatre_val.getPrice())
+def bookTickets(movie):
+  show = int(input("Select show : "))       
+  if show <= len(movie.getShow()):   
+    ticket = int(input("Enter Booking Tickets: "))
+    show = movie.getShow()[show-1]
+    movieSeat = int(show.getSeat())-ticket
+    if movieSeat >= 0:
+      show.setSeat(movieSeat) 
+      print("total ticket prices: ",int(show.getPrice()) * ticket)
+      threatreName = movie.getThreatre()
+      print(threatreName.getTheatreName() + " " + "- Threatre")
+      print(movie.getMovieName() + " " + "Movie")
+      print("{}{}{}{}{} ".format("Booked",   " " , ticket , " ", "tickets"))
 
-    choice = int(input("Enter choice: "))        
-    if choice <= len(theatreList):    
-        book = int(input("Enter Booking Tickets: "))
-        theatre = theatreList[choice-1]
-        seat = int(theatre.getSeat()) - book
-        if seat > 0:           
-            theatre.setSeat(seat) 
-            print("total ticket prices: ",int(theatre.getPrice()) * book)
-            print("Seats are available: ", theatre.getSeat())
-        elif seat == 0:
-            print("Seats are not available")
-            
-        else:
-            print("Seats are not available")        
+    elif movieSeat == 0:
+      print("Seats are not available")      
     else:
-        print("Correct input for booking")       
-        
+      print("Seats are not available") 
+  else:
+    print("Correct input for booking")    
 
-def bookTickets():
-    print('Tickets Booking')   
-    userInput = int(input("Enter number: ")) 
-    if userInput == 1:       
-        theatreA = getTheatreDetails(theatresA)
-
-    elif userInput == 2:
-        theatreB = getTheatreDetails(theatresB)    
-            
-    else:
-        print("Correct input for select theatre")    
-
-
-def displayMovies(theatres,theatreMovie,i):   
-    for theatre in theatres:                   
-        if theatre.getMovieName() not in theatreMovie:
-            theatreMovie.append(theatre.getMovieName())    
-
-    for x,y in enumerate(theatreMovie):  
-        print("{}{}{}{}".format(x+i,'.',y,'- Movie'))
-      
-
-def listMovies():        
+def listShows():
+  theatre = int(input("Select threatre: "))
+  movie = movies[theatre-1]  
+  print(movie.getMovieName())
+  for show in movie.getShow():
+    print(show.getShowTime() + " - Show " + str(show.getSeat()) + " - Seats " + str(show.getPrice()) + " - Price ")     
+  bookTickets(movie) 
+    
+def listMovies():
     print('All Movies')
-    aTheatreMovie = []    
-    aTheatre = displayMovies(theatresA, aTheatreMovie,1)        
-    bTheatreMovie = []        
-    bTheatre = displayMovies(theatresB,bTheatreMovie,2)
+    for movie_idx,movie_val in enumerate(movies):
+        print("{}{}{}{}".format(movie_idx + 1, '.', movie_val.getMovieName(), '- Movie'))
 
 def printMenu():
     print("Menu")
     print("1. ListTheatre\n2. BookingTickets\n3. ListMovie\n4. Exit")
-
-  
+ 
 def startApp():
-    createTheatre()
-    while True:
-        printMenu()
-        userChoice = int(input("Enter Your choice: "))           
-        if userChoice == 1:
-            listTheatres()
-        elif userChoice == 2:
-            listTheatres()
-            bookTickets()
-        elif userChoice == 3:
-            listMovies()
-        elif userChoice == 4:
-            exit()            
-        else:
-            print('Invalid choice')
+  athreatre,bthreatre = createTheatres()
+  show, newshow = createShows()
+  createMovies(athreatre,bthreatre,show,newshow)
+  while True:
+    try:
+      printMenu()
+      userChoice = int(input("Enter Your choice: "))           
+      if userChoice == 1:
+          listTheatres()
+      elif userChoice == 2:
+          listTheatres()
+          listShows()
+      elif userChoice == 3:
+          listMovies()
+      elif userChoice == 4:
+          exit()            
+      else:
+          print('Invalid choice')
+    except (SyntaxError, ValueError):   
+      print("You didn't enter a number") 
 
 def main():
     print("---Theatres---")
